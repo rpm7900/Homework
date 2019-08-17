@@ -1,0 +1,113 @@
+VBA Code Used in Submission
+Sub Stock():
+'Loop Sheets
+For Each ws In Worksheets
+'Determine Last Row
+LastRow = ws.Cells(Rows.Count, 1).End(xlUp).Row
+
+'Column Headers for Totals
+ws.Range("I1").Value = "Ticker"
+ws.Range("J1").Value = "Yearly Change"
+ws.Range("K1").Value = "Percent Change"
+ws.Range("L1").Value = "Total Stock Volume"
+ws.Range("O1").Value = "Ticker"
+ws.Range("P1").Value = "Value"
+ws.Range("N2").Value = "Greatest % Increase"
+ws.Range("N3").Value = "Greatest % Decrease"
+ws.Range("N4").Value = "Greatest Total Value"
+
+'Roll up Ticker values
+Dim Ticker_Name As String
+Dim Ticker_Total As Double
+Dim Stock_Close As Double
+Dim Stock_Open As Double
+Dim Stock_Change As Double
+Dim Percent_Change As Double
+Ticker_Total = 0
+Stock_Change = 0
+Percent_Change = 0
+Dim max_percent As Integer
+
+
+'Set the Location
+Dim Ticker_Summary As Integer
+Ticker_Summary = 2
+
+Dim first_row As Long
+first_row = 2
+
+' Biggest/Smallest Changes Variables
+
+
+
+
+' Loop through Ticker
+For i = 2 To LastRow
+
+If Cells(i + 1, 1).Value <> Cells(i, 1).Value Then
+
+Ticker_Name = ws.Cells(i, 1).Value
+
+Ticker_Total = Ticker_Total + ws.Cells(i, 7).Value
+
+Stock_Change = (Cells(i, 6).Value - ws.Cells(first_row, 3).Value)
+
+Percent_Change = ((ws.Cells(i, 6).Value - ws.Cells(first_row, 3).Value) / (ws.Cells(first_row, 3).Value))
+
+first_row = i + 1
+
+
+' Print Ticker Label in table
+ws.Range("I" & Ticker_Summary).Value = Ticker_Name
+
+' Print Ticker Yearly Change
+
+ws.Range("J" & Ticker_Summary).Value = Stock_Change
+
+'Print Ticker Percent Change
+ws.Range("K" & Ticker_Summary).Value = Percent_Change
+
+'Print Ticker Amounts in table
+ws.Range("L" & Ticker_Summary).Value = Ticker_Total
+
+Ticker_Summary = Ticker_Summary + 1
+
+Ticker_Total = 0
+
+Else
+Ticker_Total = Ticker_Total + Cells(i, 7).Value
+
+'Max/Low
+
+
+'Color Formatting
+
+
+' Formatting
+ws.Cells(i, 12).Style = "Currency"
+ws.Cells(i, 11).Style = "Percent"
+
+
+End If
+
+
+
+Next i
+
+Next ws
+
+
+
+End Sub
+
+Color Conditional and Max code that I could get to work
+Color Formatting
+If Range("J").Value >= 0 Then
+Cells(i, 10).Interior.ColorIndex = 4
+Else: Cells(i, 10).Interior.ColorIndex = 3
+
+Max
+Dim max_percent As Integer
+max_percent = ws.WorksheetFunction.Max(Range("K2:K100000"))
+Cells(16, 2).Value = max_percent
+
